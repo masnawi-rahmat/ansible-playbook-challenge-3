@@ -15,7 +15,7 @@
 # (4) saving parsed data into a new file  
 # (5) calculating the sum of uni/poly IT graduates and writing the value into a pre-existing file
 # (6) optional - removing all directory, subdirectories and files created by this ansible playbook
-# and to activate 'uncommment' line 104 to 114
+# and to activate 'uncomment' line 104 to 114
 
 ---
   - hosts: testserver
