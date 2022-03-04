@@ -1,0 +1,114 @@
+# this anisble playbook is created by masnawi rahmat in submission of class challenge no 3 
+# in Generation SG/Temasek Poly SGUPMSCT Cloud Support and DevOPs Bootcamp cohort no 4 Yr 2022
+# this ansible playbook assumes that you:
+# (1) have the NOPASSWD auth in the remote node to execute commands otherwise please insert line 
+# "your_username ALL=(ALL:ALL)       NOPASSWD: ALL" in /etc/sudoers.d
+# (2) have jmespath package installed to execute 'jmesquery' otherwise do a 'pip install jmespath' 
+# the objectives of this ansible playbook:
+# (1) fetch data from data.gov.sg api
+# (2) manipulate and save data file
+# (3) calculate the sum of uni/poly IT graduates from yyyy to yyyy 
+# tasks covered in this playbook: 
+# (1) creating directory and subdirectories by looping
+# (2) fetching and saving data from data.gov.sg api into a file
+# (3) parsing json data with jmespath and json_query
+# (4) saving parsed data into a new file  
+# (5) calculating the sum of uni/poly IT graduates and writing the value into a pre-existing file
+# (6) optional - removing all directory, subdirectories and files created by this ansible playbook
+# and to activate 'uncommment' line 104 to 114
+
+---
+  - hosts: testserver
+    become: true
+    gather_facts: false
+    tasks:
+      
+      - name: create and set folder auth. for new directory and subdirectories by looping
+        file:
+          path: "{{ item }}"
+          state: directory
+          mode: 0777
+        loop:
+          - ./challenge_3/data_uni
+          - ./challenge_3/data_poly
+      
+      - name: fetch, name, set file auth. and file uni enrolment data from data.gov.sg api into subdirectory
+        uri:
+          url: https://data.gov.sg/api/action/datastore_search?resource_id=115bf8a7-46df-466c-b7fc-375ef3c1b425&q=Information+Technology+MF
+          method: GET
+          return_content: yes
+          dest: ./challenge_3/data_uni/data_uni_00
+          mode: 0777 
+        register: data_uni_00
+
+      - name: generate list of years and corresponding nos of uni IT graduates in format 'YYYY' top and 'No of Uni IT Graduates' bottom
+        debug: msg="{{ data_uni_00.json | json_query(jmesquery) }}"
+        vars:
+          jmesquery: result.records[*].[year, graduates]
+        register: data_uni_01
+
+      - name: append list into file 'data_uni_01' and set file auth. in subdirectory
+        copy:
+          content: "{{ data_uni_01 }}"
+          dest: ./challenge_3/data_uni/data_uni_01
+          mode: 0777
+
+      - name: total nos of uni IT graduates  
+        debug:
+          msg: "Total nos of Uni IT Graduates: {{ data_uni_01 | json_query('msg[*][1]')|list|map('int')|sum}}"
+        register: total_uni_IT_graduates
+
+      - name: insert the total nos of uni IT graduates in file data_uni_01
+        lineinfile:
+          path: ./challenge_3/data_uni/data_uni_01
+          line: "{{ total_uni_IT_graduates }}"
+       
+      - name: fetch, name, set file auth. and file poly enrolment data from data.gov.sg api into subdirectory
+        uri:
+          url: https://data.gov.sg/api/action/datastore_search?resource_id=f358cf0d-61fa-4eeb-93a2-1eca971cf1a4&q=Information+Technology+MF
+          method: GET
+          return_content: yes
+          dest: ./challenge_3/data_poly/data_poly_00
+          mode: 0777
+        register: data_poly_00
+
+      - name: generate list of years and corresponding nos of poly IT graduates in format 'YYYY' top and 'No of Uni IT Graduates' bottom 
+        debug: msg="{{ data_poly_00.json | json_query(jmesquery) }}"
+        vars:
+          jmesquery: result.records[*].[year, graduates]
+        register: data_poly_01
+
+      - name: append list into file 'data_poly_01' and set file auth. in subdirectory
+        copy:
+          content: "{{ data_poly_01 }}"
+          dest: ./challenge_3/data_poly/data_poly_01
+          mode: 0777
+
+      - name: total nos of poly IT graduates  
+        debug:
+          msg: "Total nos of Poly IT Graduates: {{ data_poly_01 | json_query('msg[*][1]')|list|map('int')|sum}}"
+        register: total_poly_IT_graduates
+
+      - name: insert the total nos of poly IT graduates in file data_poly_01
+        lineinfile:
+          path: ./challenge_3/data_poly/data_poly_01
+          line: "{{ total_poly_IT_graduates }}"
+
+      - name: confirm directories and files created in this ansible playbook 
+        shell: ls -R ./challenge_3
+        register: confirm_directory_created
+
+      - debug:
+          msg: "Directories and files created {{ confirm_directory_created.stdout_lines }}"
+
+      # - name: clear challenge 3 directory and files
+      #   file: 
+      #     state: absent
+      #     path: ./challenge_3
+
+      # - name: confirm deletion of challenge 3 directory and files 
+      #   shell: ls -R ./challenge_3
+      #   register: confirm_directory_deletion
+
+      # - debug:
+      #     msg: "{{ confirm_directory_deletion.stdout_lines }}"
