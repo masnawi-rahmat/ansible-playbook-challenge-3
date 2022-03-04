@@ -6,7 +6,7 @@
 # (2) have jmespath package installed to execute 'jmesquery' otherwise do a 'pip install jmespath' 
 # the objectives of this ansible playbook:
 # (1) fetch data from data.gov.sg api
-# (2) manipulate and save data file
+# (2) parse and save json data file
 # (3) calculate the sum of uni/poly IT graduates from yyyy to yyyy 
 # tasks covered in this playbook: 
 # (1) creating directory and subdirectories by looping
