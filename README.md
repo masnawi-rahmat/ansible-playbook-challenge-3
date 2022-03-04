@@ -4,7 +4,7 @@
 # in Generation SG/Temasek Poly SGUPMSCT Cloud Support and DevOPs Bootcamp cohort no 4 Yr 2022
 # this ansible playbook assumes that you:
 # (1) have the NOPASSWD auth in the remote node to execute commands otherwise please insert line 
-# "your_username ALL=(ALL:ALL)       NOPASSWD: ALL" in /etc/sudoers.d
+# "your_username" ALL=(ALL:ALL)       NOPASSWD: ALL" in /etc/sudoers.d
 # (2) have jmespath package installed to execute 'jmesquery' otherwise do a 'pip install jmespath' 
 # the objectives of this ansible playbook:
 # (1) fetch data from data.gov.sg api
