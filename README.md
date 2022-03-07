@@ -1,5 +1,6 @@
 # ansible-playbook-challenge-3a
 # class challenge creating ansible playbook to parse data from web service and into remote node
+# this ansible playbook is created with learning purpose in mind more thaan optimisation
 # this anisble playbook is created by masnawi rahmat in submission of class challenge no 3 
 # in Generation SG/Temasek Poly SGUPMSCT Cloud Support and DevOPs Bootcamp cohort no 4 Yr 2022
 # this ansible playbook assumes that you:
