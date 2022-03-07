@@ -1,6 +1,6 @@
 # ansible-playbook-challenge-3a
 # class challenge creating ansible playbook to parse data from web service and into remote node
-# this ansible playbook is created with learning purpose in mind more thaan optimisation
+# this ansible playbook is created with learning purpose more than optimisation in mind
 # this anisble playbook is created by masnawi rahmat in submission of class challenge no 3 
 # in Generation SG/Temasek Poly SGUPMSCT Cloud Support and DevOPs Bootcamp cohort no 4 Yr 2022
 # this ansible playbook assumes that you:
@@ -18,4 +18,4 @@
 # (4) saving parsed data into a new file  
 # (5) calculating the sum of uni/poly IT graduates and writing the value into a pre-existing file
 # (6) optional - removing all directory, subdirectories and files created by this ansible playbook
-# and to activate, please 'uncomment' line 104 to 114
+# and to activate, please 'uncomment' line 105 to 115
